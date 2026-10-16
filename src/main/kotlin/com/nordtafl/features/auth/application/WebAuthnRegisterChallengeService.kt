@@ -43,7 +43,7 @@ class WebAuthnRegisterChallengeService(
         if (webAuthnCredentialRepository.existsByUserId(command.userId)) {
             throw ConflictException(
                 code = "WEBAUTHN_ALREADY_REGISTERED",
-                message = "El usuario ya tiene una credencial biométrica registrada"
+                message = "El usuario ya tiene una credencial biometrica registrada"
             )
         }
 
