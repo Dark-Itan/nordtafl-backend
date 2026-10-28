@@ -6,6 +6,9 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6"
 }
 
+// Forzar Hibernate 6.6 (arregla el bug de validación de schema en Hibernate
+extra["hibernate.version"] = "6.6.1.Final"
+
 group = "com.nordtafl"
 version = "1.0.0"
 description = "nordtafl-backend"
