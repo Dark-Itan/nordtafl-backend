@@ -1,12 +1,15 @@
-plugins {
+﻿plugins {
     kotlin("jvm") version "2.0.20"
     kotlin("plugin.spring") version "2.0.20"
     kotlin("plugin.jpa") version "2.0.20"
+    jacoco
     id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.6"
+    id("org.sonarqube") version "7.5.0.8588"
+
 }
 
-// Forzar Hibernate 6.6 (arregla el bug de validación de schema en Hibernate
+
 extra["hibernate.version"] = "6.6.1.Final"
 
 group = "com.nordtafl"
@@ -21,6 +24,24 @@ java {
 
 repositories {
     mavenCentral()
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco"))
+    }
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 dependencies {
@@ -58,6 +79,10 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // MockK para Kotlin
+    testImplementation("io.mockk:mockk:1.13.13")
+    testImplementation("org.assertj:assertj-core:3.26.3")
 }
 
 kotlin {
@@ -72,4 +97,14 @@ tasks.withType<Test> {
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
     archiveFileName.set("nordtafl.jar")
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "nordtafl-backend")
+        property("sonar.projectName", "NordTafl Backend")
+        property("sonar.projectVersion", "1.0.0")
+        property("sonar.host.url", "http://localhost:9000")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/jacocoTestReport.xml")
+    }
 }
