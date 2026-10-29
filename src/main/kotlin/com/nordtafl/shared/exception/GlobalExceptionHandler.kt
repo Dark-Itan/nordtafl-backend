@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.time.Instant
 import java.util.UUID
+import org.springframework.web.bind.MethodArgumentNotValidException
 
 @RestControllerAdvice
 class GlobalExceptionHandler(
@@ -108,6 +109,32 @@ class GlobalExceptionHandler(
         )
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleMethodArgumentNotValid(
+        ex: MethodArgumentNotValidException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        val fieldError = ex.bindingResult.fieldErrors.firstOrNull()
+
+        val detail = fieldError?.defaultMessage ?: "Parametros de entrada no validos"
+        val code = when (fieldError?.field) {
+            "correo" -> "INVALID_EMAIL"
+            "password" -> "INVALID_PASSWORD_FORMAT"
+            "nombre" -> "INVALID_NAME"
+            else -> "VALIDATION_ERROR"
+        }
+
+        log.warn("Error de validacion en DTO: $detail")
+
+        return buildResponse(
+            status = HttpStatus.BAD_REQUEST,
+            code = code,
+            title = "Parametros de entrada no validos",
+            detail = detail,
+            request = request
+        )
+    }
+
     @ExceptionHandler(Exception::class)
     fun handleGeneric(
         ex: Exception,
@@ -118,7 +145,7 @@ class GlobalExceptionHandler(
             status = HttpStatus.INTERNAL_SERVER_ERROR,
             code = "INTERNAL_ERROR",
             title = "Error interno",
-            detail = "Ocurrió un error inesperado. Intenta de nuevo más tarde.",
+            detail = "Ocurrio un error inesperado. Intenta de nuevo mas tarde.",
             request = request
         )
     }
