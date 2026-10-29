@@ -43,3 +43,6 @@ out/
 .env
 .env.local
 .env.*.local
+
+# Logs de debug temporal
+*.log
