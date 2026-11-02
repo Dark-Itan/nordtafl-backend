@@ -15,8 +15,8 @@ data class RegisterRequest(
     @field:Size(max = 254, message = "El correo no puede superar los 254 caracteres")
     val correo: String,
 
-    @field:NotBlank(message = "La contraseña es obligatoria")
-    @field:Size(min = 12, max = 128, message = "La contraseña debe tener entre 12 y 128 caracteres")
+    @field:NotBlank(message = "La contrasena es obligatoria")
+    @field:Size(min = 12, max = 128, message = "La contrasena debe tener entre 12 y 128 caracteres")
     val password: String,
 
     @field:Pattern(
@@ -28,7 +28,7 @@ data class RegisterRequest(
 
 data class LoginRequest(
     @field:NotBlank(message = "El correo es obligatorio")
-    @field:Email(message = "El correo no tiene un formato válido")
+    @field:Email(message = "El correo no tiene un formato valido")
     val correo: String,
 
     @field:NotBlank(message = "La contraseña es obligatoria")

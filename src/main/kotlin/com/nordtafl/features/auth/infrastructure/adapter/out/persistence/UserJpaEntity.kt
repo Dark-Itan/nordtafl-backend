@@ -4,6 +4,10 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import java.time.Instant
 import java.util.UUID
 
@@ -12,6 +16,7 @@ import java.util.UUID
 class UserJpaEntity(
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, updatable = false)
     var id: UUID? = null,
 
@@ -42,9 +47,11 @@ class UserJpaEntity(
     @Column(name = "ultimo_acceso")
     var ultimoAcceso: Instant? = null,
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     var createdAt: Instant? = null,
 
+    @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     var updatedAt: Instant? = null
 )
