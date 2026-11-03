@@ -28,7 +28,7 @@ class OtpMapper {
             userId = domain.userId,
             correo = domain.correo.value,
             codigoHash = domain.codigoHash,
-            proposito = domain.proposito.name,
+            proposito = domain.proposito.name.lowercase(),
             intentos = domain.intentos,
             maxIntentos = domain.maxIntentos,
             usado = domain.usado,

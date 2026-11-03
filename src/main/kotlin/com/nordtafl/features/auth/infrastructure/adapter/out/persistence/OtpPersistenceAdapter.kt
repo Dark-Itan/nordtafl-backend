@@ -30,7 +30,7 @@ class OtpPersistenceAdapter(
             userId = userId,
             correo = correo.value,
             codigoHash = codigoHash,
-            proposito = proposito.name,
+            proposito = proposito.name.lowercase(), // <-- CORREGIDO: a minúsculas
             intentos = 0,
             maxIntentos = 5,
             usado = false,
@@ -49,7 +49,7 @@ class OtpPersistenceAdapter(
 
         return jpaRepository.findLatestByCorreoAndProposito(
             correo = correo.value,
-            proposito = proposito.name
+            proposito = proposito.name.lowercase() // <-- CORREGIDO: a minúsculas
         ).firstOrNull()?.let { mapper.toDomain(it) }
     }
 
@@ -68,7 +68,7 @@ class OtpPersistenceAdapter(
 
         val affected = jpaRepository.invalidatePrevious(
             correo = correo.value,
-            proposito = proposito.name
+            proposito = proposito.name.lowercase()
         )
 
         if (affected > 0) {

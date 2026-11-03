@@ -4,6 +4,9 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import org.hibernate.annotations.CreationTimestamp
 import java.time.Instant
 import java.util.UUID
 
@@ -12,6 +15,7 @@ import java.util.UUID
 class OtpJpaEntity(
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, updatable = false)
     var id: UUID? = null,
 
@@ -39,6 +43,7 @@ class OtpJpaEntity(
     @Column(name = "expira_en", nullable = false)
     var expiraEn: Instant = Instant.now(),
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     var createdAt: Instant? = null
 )
